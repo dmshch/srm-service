@@ -1,0 +1,12 @@
+*.pyc
+*.*~
+/bin
+/include
+/lib*
+/.pytest_cache
+/__pycache__
+*.cfg
+test_classes_receivers.py
+static/css/
+static/js/
+*.db
