@@ -16,8 +16,7 @@ import datetime
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
-#get all settings, login/password(users, receivers) from db as dicts 
-#settings, receiver_authentication, user_authentication = edit_settings.get_settings()
+#get all settings, login/password(users) from db as dicts 
 
 #get all receivers from db as objects
 list_of_objects = get_objects.get_objects_receivers("active_only")

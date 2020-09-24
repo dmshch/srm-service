@@ -5,7 +5,7 @@ import sqlite3
 
 #make and get object
 
-from . import load_data_from_db
+#from . import load_data_from_db
 from .receivers import proview2962
 from .receivers import proview7000
 from .receivers import proview7100s
