@@ -28,6 +28,10 @@
 					<a class="nav-link" href="/">Main</a>
 				</li>
 				
+				<li class="nav-item">
+					<a class="nav-link" href="/satellite/monitoring">Monitoring</a>
+				</li>
+				
 				<!-- Dropdown -->
 				<li class="nav-item dropdown">
 				  <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
@@ -145,8 +149,20 @@
 					<a class="nav-link" href="/receivers">Database editing</a>
 				</li>
 				
-				<li class="nav-item">
+				<!--li class="nav-item">
 					<a class="nav-link" href="/settings">Settings</a>
+				</li-->
+
+				<!-- Dropdown -->
+				<li class="nav-item dropdown">
+				  <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+					Settings 
+				  </a>
+				  <div class="dropdown-menu">
+					<a class="dropdown-item" href="/settings/global">Global</a>
+					<a class="dropdown-item" href="/settings/users">Users</a>
+					<a class="dropdown-item" href="/settings/receivers">Receivers</a>
+				  </div>
 				</li>
 				
 			</ul>
@@ -160,7 +176,7 @@
     </header>
     <main>
       <section>
-        <h1>{{name}}</h1>
+        <h3>{{name}}</h3>
         <!--  -->
 		{% if name == 'Main' %}
 		{% include 'main.html' %}

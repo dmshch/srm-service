@@ -33,7 +33,11 @@ def index():
 def monitoring(satellite):
     name = satellite
     time = datetime.datetime.now().strftime("%H:%M")
-    final_list = get_data(name)
+    if name == "monitoring":
+        final_list = list_of_objects
+        name = "Monitoring"
+    else:
+        final_list = [i for i in list_of_objects if i.satellite == name]
     return render_template('index.html', name = name, time=time, final_list = final_list)
     
 @app.route('/receivers', methods=['POST', 'GET'])
@@ -61,12 +65,11 @@ def edit(ip, port, action):
         # receiver is dict -> keys: ip, model, satellite, login, password, port, state
         receiver = edit_db.select_receiver_for_edit(ip, port)
         return render_template('index.html', name='Edit', time=time, receiver=receiver)
+
     if action == "update":
-        print(ip, request.form['model'], request.form['satellite'], request.form['login'], request.form['password'], port, request.form['state'])
         # update db
         status = edit_db.update_receiver(ip, request.form['model'], request.form['satellite'], request.form['login'], request.form['password'], port, request.form['state'])
-        # check used or not
-        # if used -> check in list_of_objects -> if exist -> remove, make obj and add-> if not -> make obj and add
+        # check used or not. if used -> check in list_of_objects -> if exist -> remove, make obj and add-> if not -> make obj and add
         if request.form['state'] == "used":
             for obj in list_of_objects:
                 if obj.ip == ip and obj.port == port:
@@ -80,23 +83,28 @@ def edit(ip, port, action):
                     list_of_objects.remove(obj)
         flash(status)
         return redirect(url_for('receivers'))
+
     if action == "delete":
         status = delete_data_from_db.delete_data(ip, port)
         flash(status)
         if status == "IP address and port have been removed":
             for obj in list_of_objects:
-                if obj.ip == ip and obj.port == port and obj.state == 1:
+                if obj.ip == ip and obj.port == port:
                     list_of_objects.remove(obj)
         return redirect(url_for('receivers'))
 
-@app.route('/settings')
-def settings():
-     time = datetime.datetime.now().strftime("%H:%M")
-     return render_template('index.html', name='Settings', time=time)
+@app.route('/settings/<path>', methods=['POST', 'GET'])
+def settings(path):
+    time = datetime.datetime.now().strftime("%H:%M")
+    status = ""
+    if path == "global" and request.method == 'POST':
+        print(request.form['time'], request.form['CN'], request.form['ebno'])
+        #edit -> return and show
+    elif path == "users" and request.method == 'POST':
+        print(request.form['adminPassword'], request.form['monitorPassword'])
+        #edit
+    elif path == "receivers" and request.method == 'POST':
+        pass
+    flash(status)
+    return render_template('index.html', name='Settings', time=time, path=path, subname=path.capitalize())
 
-def get_data(name):
-    new_list = []
-    for i in list_of_objects:
-        if i.satellite == name:
-            new_list.append(i)
-    return new_list

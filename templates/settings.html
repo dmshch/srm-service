@@ -1,3 +1,4 @@
+<h4>{{subname}}</h4>
 <div class="container-fluid">
 	
 	{% with messages = get_flashed_messages() %}
@@ -10,7 +11,11 @@
 	
 	<div class="row">
 		<div class="col-sm-12">
+		
 			<form action="" method="post">
+			
+				{% if path == "global" %}
+				
 				<h6>Period of update:</h6>
 				<div class="form-group row">
 					<div class="col-sm-1">
@@ -18,6 +23,22 @@
 					</div>	
 					<label for="time" class="col-form-label"> - reception parameters update period (integer value).</label>
 				</div>
+				<h6>Boundary values for C/N and Eb/NO:</h6>
+				<div class="form-group row">
+					<div class="col-sm-1">
+						<input type="text" class="form-control" id="CN" placeholder="C/N (dB)" name="CN">
+					</div>
+					<label for="CN" class="col-form-label"> - for C/N (dB, integer or decimal value)</label>
+				</div>
+				<div class="form-group row">
+					<div class="col-sm-1">
+						<input type="text" class="form-control" id="ebno" placeholder="Eb/NO(dB)" name="ebno">
+					</div>
+					<label for="ebno" class="col-form-label"> - for Eb/NO(dB, integer or decimal value)</label>
+				</div>					
+				
+				{% elif path == "users" %}
+				
 				<h6>Users passwords:</h6>
 				<div class="form-group row">
 					<div class="col-sm-1">
@@ -31,6 +52,9 @@
 					</div>
 					<label for="monitorPassword" class="col-form-label"> - for user "monitor"</label>
 				</div>
+				
+				{% elif path == "receivers" %}
+				
 				<h6>Default users and passwords for receiver models (also receiver description and its software):</h6>
 				<div class="form-group row">
 					<div class="col-sm-1">
@@ -86,19 +110,12 @@
 					</div>
 					<label for="proview8130Password" class="col-form-label"> - for proview8130</label>
 				</div>
-				<h6>Boundary values for C/N and Eb/NO:</h6>
-				<div class="form-group row">
-					<div class="col-sm-1">
-						<input type="text" class="form-control" id="CN" placeholder="C/N (dB)" name="CN">
-					</div>
-					<label for="CN" class="col-form-label"> - for C/N (dB, integer or decimal value)</label>
-				</div>
-				<div class="form-group row">
-					<div class="col-sm-1">
-						<input type="text" class="form-control" id="ebno" placeholder="Eb/NO(dB)" name="ebno">
-					</div>
-					<label for="ebno" class="col-form-label"> - for Eb/NO(dB, integer or decimal value)</label>
-				</div>				
+				
+				{% endif %}
+				
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary" onClick="return window.confirm('Update settings?');">Update</button>
+			    </div>				
 			</form>
 		</div>
 	</div>
