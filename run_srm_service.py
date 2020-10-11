@@ -16,8 +16,6 @@ import datetime
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
-#get all settings, login/password(users) from db as dicts 
-
 #get all receivers from db as objects
 list_of_objects = get_objects.get_objects_receivers("active_only")
 
@@ -97,14 +95,22 @@ def edit(ip, port, action):
 def settings(path):
     time = datetime.datetime.now().strftime("%H:%M")
     status = ""
-    if path == "global" and request.method == 'POST':
-        print(request.form['time'], request.form['CN'], request.form['ebno'])
-        #edit -> return and show
-    elif path == "users" and request.method == 'POST':
-        print(request.form['adminPassword'], request.form['monitorPassword'])
-        #edit
+    values = dict()
+    if path == "global":
+        if request.method == 'GET':
+            values = edit_settings.get_global_settings()
+        if request.method == 'POST':
+            print(request.form['time'], request.form['CN'], request.form['ebno'])
+    elif path == "users":
+        if request.method == 'GET':
+            values = edit_settings.get_users_settings()
+        if request.method == 'POST':
+            print(request.form['adminPassword'], request.form['monitorPassword'])
     elif path == "receivers" and request.method == 'POST':
-        pass
+        if request.method == 'GET':
+            values = edit_settings.get_receivers_settings()
+        if request.method == 'POST':
+            pass
     flash(status)
-    return render_template('index.html', name='Settings', time=time, path=path, subname=path.capitalize())
+    return render_template('index.html', name='Settings', time=time, path=path, subname=path.capitalize(), values=values)
 

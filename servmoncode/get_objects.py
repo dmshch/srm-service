@@ -2,6 +2,7 @@
 
 from pathlib import *
 import sqlite3
+from servmoncode import db
 
 #make and get object
 
@@ -41,22 +42,16 @@ def return_object(ip, model, satellite, login, password, port, state):
     return receiver
 
 def get_login_and_password(model):
-    conn = sqlite3.connect(str(Path.cwd()) + "/servmoncode/servermon.db")
-    curs = conn.cursor()
-    curs.execute('SELECT login,password FROM receiver_authentication WHERE model=:model',{"model":model})
-    rows = curs.fetchall()
-    for i in rows:
-        login, password = i
-    curs.close()
-    conn.close()
+    with db.DB() as curs:
+        curs.execute('SELECT login,password FROM receiver_authentication WHERE model=:model',{"model":model})
+        rows = curs.fetchall()
+        for i in rows:
+            login, password = i
     return login, password
 
 # load all receivers from sqlite
 def load_all_receivers():
-    conn = sqlite3.connect(str(Path.cwd()) + "/servmoncode/servermon.db")
-    curs = conn.cursor()
-    curs.execute('SELECT * FROM receivers')
-    rows = curs.fetchall()
-    curs.close()
-    conn.close()
+    with db.DB() as curs:
+        curs.execute('SELECT * FROM receivers')
+        rows = curs.fetchall()
     return rows
