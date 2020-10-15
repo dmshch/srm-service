@@ -14,7 +14,11 @@ from servmoncode import edit_settings
 import datetime
 
 app = Flask(__name__)
+
+# ------------------------------------------
+# Here only for testing 
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
+# ------------------------------------------
 
 #get all receivers from db as objects
 list_of_objects = get_objects.get_objects_receivers("active_only")
@@ -100,17 +104,20 @@ def settings(path):
         if request.method == 'GET':
             values = edit_settings.get_global_settings()
         if request.method == 'POST':
+            edit_settings.set_global_settings(request.form['time'], request.form['CN'], request.form['ebno'])
             print(request.form['time'], request.form['CN'], request.form['ebno'])
     elif path == "users":
         if request.method == 'GET':
             values = edit_settings.get_users_settings()
         if request.method == 'POST':
+            edit_settings.set_users_settings(request.form['adminPassword'], request.form['monitorPassword'])
             print(request.form['adminPassword'], request.form['monitorPassword'])
-    elif path == "receivers" and request.method == 'POST':
+    elif path == "receivers":
         if request.method == 'GET':
             values = edit_settings.get_receivers_settings()
         if request.method == 'POST':
             pass
+    print(values)
     flash(status)
     return render_template('index.html', name='Settings', time=time, path=path, subname=path.capitalize(), values=values)
 

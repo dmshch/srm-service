@@ -29,8 +29,11 @@ def get_objects_receivers(flag):
     return list_of_objects
 
 def return_object(ip, model, satellite, login, password, port, state):
+
+    # getting default login and password, if they not set in receivers table
     if login == "" and password == "":
         login, password = get_login_and_password(model)
+
     if model == "proview2962":
         receiver = proview2962.ProView2962(ip, model, satellite, login, password, port, state)
     if model == "proview7000":
