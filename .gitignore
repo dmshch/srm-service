@@ -6,7 +6,9 @@
 /.pytest_cache
 /__pycache__
 *.cfg
-test_classes_receivers.py
-static/css/
-static/js/
 *.db
+how_to_run.txt
+test_2962_receivers.py
+test_7000_receivers.py
+test_7100mold_receivers.py
+test_7100s_receivers.py

@@ -8,7 +8,8 @@ from pathlib import *
 if __name__ == "__main__":
     path_to_db = "servermon.db"
 else:
-    path_to_db = str(Path.cwd()) + "/servmoncode/servermon.db"
+    #path_to_db = str(Path.cwd()) + "servermon.db"
+    path_to_db = "servermon.db"
 
 class DB:
 

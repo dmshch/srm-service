@@ -2,15 +2,15 @@
 
 from pathlib import *
 import sqlite3
-from servmoncode import db
+import db
 
 #make and get object
 
 #from . import load_data_from_db
-from .receivers import proview2962
-from .receivers import proview7000
-from .receivers import proview7100s
-from .receivers import proview7100mold
+from receivers import proview2962
+from receivers import proview7000
+from receivers import proview7100s
+from receivers import proview7100mold
 
 def get_objects_receivers(flag):
 
