@@ -4,10 +4,11 @@ import time
 import datetime
 import asyncio
 import get_objects
+import db
 
 def start():
     list_of_objects = get_objects.get_objects_receivers("active_only")
-    print_obj(list_of_objects)
+    
     loopy(list_of_objects)
 
 def loopy(list_of_objects):
@@ -16,28 +17,22 @@ def loopy(list_of_objects):
         start = time.time()
 
         ioloop = asyncio.get_event_loop()
-        #ioloop = asyncio.get_running_loop()
-        #ioloop = asyncio.new_event_loop()
-        
-        #asyncio.set_event_loop(ioloop)
 
         tasks = [ioloop.create_task(get(i)) for i in list_of_objects]
-        
-        print("task: ")
-        print(tasks)
         
         wait_tasks = asyncio.wait(tasks)
         ioloop.run_until_complete(wait_tasks)
         ioloop.close()
             
         print(tic(start))
+        
+        # writing results in db
+        save_results(list_of_objects) 
 
-        #time.sleep(600)
-        print_obj(list_of_objects)
         flag = False
         
 async def get(i):
-    print(i)
+    #print(i)
     try:
         await i.get_parameters()
     except:
@@ -58,6 +53,11 @@ def tic(start):
 def print_obj(l):
     for i in l:
         print(i.c_n)
+
+def save_results(list_of_objects):
+    for i in list_of_objects:
+        with db.DB() as curs:
+            curs.execute('UPDATE receivers SET time=:time, c_n=:c_n, eb_no=:eb_no, l_m=:l_m  WHERE ip=:ip AND port=:port',{"ip":i.ip, "port":i.port, "time":i.time, "c_n":i.c_n, "eb_no":i.eb_no, "l_m":i.l_m})
 
 if __name__ == "__main__":
     start()
