@@ -8,18 +8,18 @@ import db
 #from . import load_data_from_db
 
 # sync
-#from receivers import proview2962
-#from receivers import proview7000
-#from receivers import proview7100s
-#from receivers import proview7100mold
+#from receivers import proview2962_telnet.py
+#from receivers import proview7000_telnet.py
+#from receivers import proview7100s_ssh.py
+#from receivers import proview7100mold_ssh.py
 
 # async
-from receivers import proview2962async
-from receivers import proview7000async
-from receivers import proview7100sasync
-from receivers import proview7100moldasync
-from receivers import proview8130async
-from receivers import proview7100mnewasync
+from receivers import proview2962_telnet_async
+from receivers import proview7000_telnet_async
+from receivers import proview7100s_ssh_async
+from receivers import proview7100mold_ssh_async
+from receivers import proview8130_http_async
+from receivers import proview7100mnew_http_async
 
 def get_objects_receivers(flag):
 
@@ -44,17 +44,17 @@ def return_object(ip, model, satellite, login, password, port, state):
         login, password = get_login_and_password(model)
 
     if model == "proview2962":
-        receiver = proview2962async.ProView2962(ip, model, satellite, login, password, port, state)
+        receiver = proview2962_telnet_async.ProView2962(ip, model, satellite, login, password, port, state)
     if model == "proview7000":
-        receiver = proview7000async.ProView7000(ip, model, satellite, login, password, port, state)
+        receiver = proview7000_telnet_async.ProView7000(ip, model, satellite, login, password, port, state)
     if model == "proview7100s":
-        receiver = proview7100sasync.ProView7100s(ip, model, satellite, login, password, port, state)
+        receiver = proview7100s_ssh_async.ProView7100s(ip, model, satellite, login, password, port, state)
     if model == "proview7100mold":
-        receiver = proview7100moldasync.ProView7100mold(ip, model, satellite, login, password, port, state)
+        receiver = proview7100mold_ssh_async.ProView7100mold(ip, model, satellite, login, password, port, state)
     if model == "proview8130":
-        receiver = proview8130async.ProView8130(ip, model, satellite, login, password, port, state)
+        receiver = proview8130_http_async.ProView8130(ip, model, satellite, login, password, port, state)
     if model == "proview7100mnew":
-        receiver = proview7100mnewasync.ProView7100mnew(ip, model, satellite, login, password, port, state)
+        receiver = proview7100mnew_http_async.ProView7100mnew(ip, model, satellite, login, password, port, state)
     return receiver
 
 def get_login_and_password(model):
