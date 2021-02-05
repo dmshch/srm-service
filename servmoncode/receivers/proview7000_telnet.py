@@ -1,33 +1,30 @@
 # Copyright © 2020 Dmitrii Shcherbakov. All rights reserved.
 
-#status/interface/input/port/rf/dvb/satellite_2/port_status 1-4
-
-import paramiko
-import time
+import getpass
+import telnetlib
 from . import receiverbase
 
-class ProView7100mold(receiverbase.Receiver):
-    #for ProView 7100 multi input, old soft
+class ProView7000(receiverbase.Receiver):
+
     def get_parameters(self):
+        #for ProView 7000 
 
         HOST = self.ip
         user = self.login
         password = self.password
 
-        #/root/status/interface/input/port/rf/dvb/satellite_2/port_status 1
+        tn = telnetlib.Telnet(HOST)
 
-        client = paramiko.SSHClient()
-        client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        client.connect(hostname=HOST, username=user, password=password, look_for_keys=False, allow_agent=False)
+        tn.read_until(b"(none) login:")
+        tn.write(user.encode('ascii') + b"\n")
+        if password:
+            tn.read_until(b"Password:")
+            tn.write(password.encode('ascii') + b"\n")
 
-        with client.invoke_shell() as ssh:
-            stdin, stdout, stderr = client.exec_command('status/interface/input/port/rf/dvb/satellite_2/port_status ' + self.port + '\n')
-            data = stdout.read()
+        tn.write(b"status/interface/input/port/rf/dvb/satellite_2/port_status 1\n")
+        tn.write(b"exit\n")
 
-        client.close()
-
-        out_list = str(data).split("|")
-
+        out_list = tn.read_all().decode('ascii').split("|")
         out_data = dict()
 
         for i in range(len(out_list)):
@@ -41,3 +38,5 @@ class ProView7100mold(receiverbase.Receiver):
         self.c_n = out_data["fe_C_N_status"]
         self.eb_no = out_data["fe_Eb_N0_status"]
         self.l_m = out_data["fe_link_margin_status"]
+
+        print("ip:" +self.ip + " c_n:" + self.c_n + " eb_no:" + self.eb_no + " l_m:" +  self.l_m)
