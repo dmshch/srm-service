@@ -31,15 +31,8 @@ async def get(i):
     try:
         await i.get_parameters()
     except:
-        i.color = "gray"
-    if i.color != "gray":
-        # Looking types and make check if needed
-        if i.c_n == "0" or i.eb_no == "0" or i.l_m == "0":
-            i.color = "red"
-        elif float(i.c_n) <= 8.0 or float(i.eb_no) <=6.0:
-            i.color = "yellow"
-        else:
-            i.color = "green"
+        pass
+    
     i.time = datetime.datetime.now().strftime("%H:%M")
 
 def tic(start):

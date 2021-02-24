@@ -13,9 +13,6 @@ class Receiver:
         self.state = state
 
         self.time_of_update = ""
-        
-        """ Color of state object - red, green, yellow or white - for use in HTML page """
-        self.color = "white"
 
         """ C/N (dB) """
         self.c_n = "not initialized"
