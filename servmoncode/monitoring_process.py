@@ -31,9 +31,10 @@ async def get(i):
     try:
         await i.get_parameters()
     except:
-        pass
+        i.time, i.c_n, i.eb_no, i.l_m = "not initialized", "not initialized", "not initialized", "not initialized"
     
-    i.time = datetime.datetime.now().strftime("%H:%M")
+    #i.time = datetime.datetime.now().strftime("%H:%M")
+    i.time = datetime.datetime.now().strftime("%G %b %d %H:%M")
 
 def tic(start):
     return 'at %1.1f seconds' % (time.time() - start)
