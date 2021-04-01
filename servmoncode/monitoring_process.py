@@ -3,8 +3,8 @@
 import time
 import datetime
 import asyncio
-import get_objects
-import dbsqlalch
+from servmoncode import get_objects
+from servmoncode import dbsqlalch
 
 def start():
     list_of_objects = get_objects.get_objects_receivers()    

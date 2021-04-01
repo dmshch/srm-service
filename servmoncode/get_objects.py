@@ -1,21 +1,21 @@
 # Copyright © 2020 Dmitrii Shcherbakov. All rights reserved.
 # Making and getting objects
 
-import dbsqlalch
+from servmoncode import dbsqlalch
 
 # sync
-#from receivers import proview2962_telnet
-#from receivers import proview7000_telnet
-#from receivers import proview7100s_ssh
-#from receivers import proview7100mold_ssh
+#from servmoncode.receivers import proview2962_telnet
+#from servmoncode.receivers import proview7000_telnet
+#from servmoncode.receivers import proview7100s_ssh
+#from servmoncode.receivers import proview7100mold_ssh
 
 # async
-from receivers import proview2962_telnet_async
-from receivers import proview7000_telnet_async
-from receivers import proview7100s_ssh_async
-from receivers import proview7100mold_ssh_async
-from receivers import proview8130_http_async
-from receivers import proview7100mnew_http_async
+from servmoncode.receivers import proview2962_telnet_async
+from servmoncode.receivers import proview7000_telnet_async
+from servmoncode.receivers import proview7100s_ssh_async
+from servmoncode.receivers import proview7100mold_ssh_async
+from servmoncode.receivers import proview8130_http_async
+from servmoncode.receivers import proview7100mnew_http_async
 
 def get_objects_receivers():
 

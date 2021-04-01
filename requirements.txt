@@ -9,6 +9,7 @@ cryptography==3.3.1
 idna==2.10
 multidict==5.1.0
 paramiko==2.7.2
+psycopg2-binary==2.8.6
 pycparser==2.20
 PyNaCl==1.4.0
 six==1.15.0

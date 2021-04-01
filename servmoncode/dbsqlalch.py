@@ -1,19 +1,19 @@
 # Copyright © 2020 Dmitrii Shcherbakov. All rights reserved.
 
 import sqlalchemy as sa
-
-dialect = "postgresql"
-driver = "psycopg2"
-user = "postgres"
-password = "docker"
-host = "127.0.0.1"
-port = "5432"
-dbname = "servermon"
+import json
 
 class DB:
 
     def __init__(self):
-        self.path = dialect + "+" + driver + "://" + user+ ":" + password + "@" + host + ":" + port + "/" + dbname
+        try:
+            with open("servmoncode/settings.json", 'r', encoding='utf-8') as f:
+                data = json.load(f)
+        except:
+            print("Failed to load settings. Check the correctness of the settings file 'servmoncode/settings.json'.")
+
+        #self.path = dialect + "+" + driver + "://" + user+ ":" + password + "@" + host + ":" + port + "/" + dbname
+        self.path = data["dialect"] + "+" + data["driver"] + "://" + data["user"] + ":" + data["password"] + "@" + data["host"] + ":" + data["port"] + "/" + data["dbname"]
         #print(self.path)
 
     def __enter__(self):
