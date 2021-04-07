@@ -1,7 +1,6 @@
 # Copyright © 2020 Dmitrii Shcherbakov. All rights reserved.
 
 import paramiko
-import time
 from . import receiverbase
 
 class ProView7100s(receiverbase.Receiver):
@@ -40,4 +39,4 @@ class ProView7100s(receiverbase.Receiver):
         self.eb_no = out_data["fe_Eb_N0_status"]
         self.l_m = out_data["fe_link_margin_status"]
 
-        print("ip:" +self.ip + " c_n:" + self.c_n + " eb_no:" + self.eb_no + " l_m:" +  self.l_m)
+        #print("ip:" +self.ip + " c_n:" + self.c_n + " eb_no:" + self.eb_no + " l_m:" +  self.l_m)

@@ -2,6 +2,8 @@
 
 Satellite Receivers Monitoring service -  a service for collecting signal parameters from satellite receivers.
 
+Installation and configuration are [here](https://github.com/dmshch/srm-service/wiki).
+
 ##### This currently works for the following satellite receiver models: 
 
 * ProView 2962 (telnet access, synchronous and asynchronous implementation)
@@ -20,6 +22,4 @@ Satellite Receivers Monitoring service -  a service for collecting signal parame
 ##### Requirements:
 
 * Python >= 3.8
-* paramiko (https://pypi.org/project/paramiko/)
-* telnetlib3 (https://pypi.org/project/telnetlib3/)
-* asyncssh (https://pypi.org/project/asyncssh/)
+* You can see all requirements in requirements.txt
