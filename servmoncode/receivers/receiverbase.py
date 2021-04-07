@@ -12,8 +12,6 @@ class Receiver:
         self.port = port
         self.state = state
 
-        self.time_of_update = ""
-
         """ C/N (dB) """
         self.c_n = "not initialized"
 

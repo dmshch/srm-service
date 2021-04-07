@@ -41,4 +41,4 @@ class ProView2962(receiverbase.Receiver):
         self.eb_no = out_data["Eb/N0"]
         self.l_m = out_data["Link Margin"]
 
-        print("ip:" +self.ip + " c_n:" + self.c_n + " eb_no:" + self.eb_no + " l_m:" +  self.l_m)
+        #print("ip:" +self.ip + " c_n:" + self.c_n + " eb_no:" + self.eb_no + " l_m:" +  self.l_m)

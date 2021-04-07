@@ -7,8 +7,6 @@
 /__pycache__
 *.cfg
 *.db
-how_to_run.txt
-test_2962_receivers.py
-test_7000_receivers.py
-test_7100mold_receivers.py
-test_7100s_receivers.py
+*.txt
+*.log
+test_*.py*

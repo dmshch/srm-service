@@ -3,8 +3,9 @@
 import time
 import datetime
 import asyncio
-import get_objects
-import dbsqlalch
+from servmoncode import get_objects
+from servmoncode import dbsqlalch
+import traceback
 
 def start():
     list_of_objects = get_objects.get_objects_receivers()    
@@ -21,32 +22,23 @@ def loopy(list_of_objects):
     ioloop.run_until_complete(wait_tasks)
     ioloop.close()
             
-    print(tic(start))
-        
-    # writing results in db
+    print("Polling time was: " + tic(start))
+
     save_results(list_of_objects) 
         
 async def get(i):
     #print(i)
     try:
         await i.get_parameters()
-    except:
+    except BaseException as err:
+        print(traceback.format_exc())
         i.time, i.c_n, i.eb_no, i.l_m = "not initialized", "not initialized", "not initialized", "not initialized"
     
-    #i.time = datetime.datetime.now().strftime("%H:%M")
     i.time = datetime.datetime.now().strftime("%G %b %d %H:%M")
 
 def tic(start):
     return 'at %1.1f seconds' % (time.time() - start)
 
-def print_obj(l):
-    for i in l:
-        print(i.c_n)
-
 def save_results(list_of_objects):
     for i in list_of_objects:
         dbsqlalch.save(i.ip, i.port, i.time, i.c_n, i.eb_no, i.l_m)
-        #print(i.ip, i.port, i.time, i.c_n, i.eb_no, i.l_m)
-
-if __name__ == "__main__":
-    start()

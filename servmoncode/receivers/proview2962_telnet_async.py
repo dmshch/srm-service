@@ -3,7 +3,6 @@
 #for ProView 2962
 
 import asyncio
-import time
 from . import receiverbase
 
 class ProView2962(receiverbase.Receiver):
@@ -60,5 +59,5 @@ class ProView2962(receiverbase.Receiver):
         writer.close()
         await writer.wait_closed()
 
-        print("ip:" +self.ip + " c_n:" + self.c_n + " eb_no:" + self.eb_no + " l_m:" +  self.l_m)
+        #print("ip:" +self.ip + " c_n:" + self.c_n + " eb_no:" + self.eb_no + " l_m:" +  self.l_m)
         
