@@ -33,23 +33,16 @@ def return_object(ip, model, satellite, login, password, port, state):
     # getting default login and password, if they not set in receivers table
     if login == "" and password == "" or login == None and password == None:
         login, password = dbsqlalch.get_login_and_password(model)
+        
+    select_class = {
+        "proview2962": ProView2962(ip, model, satellite, login, password, port, state),
+        "proview7000": ProView7000(ip, model, satellite, login, password, port, state),
+        "proview7100s": ProView7100s(ip, model, satellite, login, password, port, state),
+        "proview7100mold": ProView7100mold(ip, model, satellite, login, password, port, state),
+        "proview8130": ProView8130(ip, model, satellite, login, password, port, state),
+        "proview7100mnew": ProView7100mnew(ip, model, satellite, login, password, port, state)
+    }
 
-    if model == "proview2962":
-        receiver = ProView2962(ip, model, satellite, login, password, port, state)
-        #receiver = proview2962_telnet.ProView2962(ip, model, satellite, login, password, port, state)
-    if model == "proview7000":
-        receiver = ProView7000(ip, model, satellite, login, password, port, state)
-        #receiver = proview7000_telnet.ProView7000(ip, model, satellite, login, password, port, state)
-    if model == "proview7100s":
-        receiver = ProView7100s(ip, model, satellite, login, password, port, state)
-        #receiver = proview7100s_ssh.ProView7100s(ip, model, satellite, login, password, port, state)
-    if model == "proview7100mold":
-        receiver = ProView7100mold(ip, model, satellite, login, password, port, state)
-        #receiver = proview7100mold_ssh.ProView7100mold(ip, model, satellite, login, password, port, state)
-    if model == "proview8130":
-        receiver = ProView8130(ip, model, satellite, login, password, port, state)
-    if model == "proview7100mnew":
-        receiver = ProView7100mnew(ip, model, satellite, login, password, port, state)
-    return receiver
+    return select_class[model]
 
 

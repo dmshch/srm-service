@@ -37,6 +37,11 @@ class ProView2962(receiverbase.Receiver):
         data = await reader.readuntil(separator=b'root>')
         #print(f'Received: {data!r}')
 
+        message = "exit\n"
+        #print(f'{message!r}')
+        writer.write(message.encode())
+        await writer.drain()
+
         out_list = data.decode('ascii').split("|")
         out_data = dict()
         for i in range(len(out_list)):

@@ -7,7 +7,6 @@ import asyncio
 class ProView7100mnew(receiverbase.Receiver):
 
     async def get_parameters(self):
-        #for ProView 8130
 
         HOST = self.ip
         user = self.login
