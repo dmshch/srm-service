@@ -21,10 +21,10 @@ def loopy(list_of_objects):
     wait_tasks = asyncio.wait(tasks)
     ioloop.run_until_complete(wait_tasks)
     ioloop.close()
-            
+    
     print("Polling time was: " + tic(start))
 
-    save_results(list_of_objects) 
+    dbsqlalch.save(list_of_objects)
         
 async def get(i):
     #print(i)
@@ -39,6 +39,3 @@ async def get(i):
 def tic(start):
     return 'at %1.1f seconds' % (time.time() - start)
 
-def save_results(list_of_objects):
-    for i in list_of_objects:
-        dbsqlalch.save(i.ip, i.port, i.time, i.c_n, i.eb_no, i.l_m)
