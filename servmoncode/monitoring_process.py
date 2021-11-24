@@ -17,15 +17,14 @@ def loopy(list_of_objects):
     ioloop = asyncio.get_event_loop()
 
     tasks = [ioloop.create_task(get(i)) for i in list_of_objects]
-        
+
     wait_tasks = asyncio.wait(tasks)
     ioloop.run_until_complete(wait_tasks)
     ioloop.close()
     
     print("Polling time was: " + tic(start))
-
-    dbsqlalch.save(list_of_objects)
-        
+    dbsqlalch.DB().save(list_of_objects)
+    
 async def get(i):
     #print(i)
     try:

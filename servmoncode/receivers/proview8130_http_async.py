@@ -40,6 +40,10 @@ class ProView8130(receiverbase.Receiver):
                 out_data["Link Margin"] = out_list[i].replace("<LinkMargin>", "").replace("</LinkMargin>", "")
             if "BER" in out_list[i]:
                 out_data["BER"] = out_list[i].replace("<BER>", "").replace("</BER>", "")
+            #else:
+                #self.c_n = "0"
+                #self.eb_no = "0"
+                #self.l_m = "0"
 
         self.c_n = out_data["C/N"]
         self.eb_no = out_data["Eb/N0"]
