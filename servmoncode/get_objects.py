@@ -10,11 +10,14 @@ from servmoncode import dbsqlalch
 #from servmoncode.receivers import proview7100mold_ssh
 
 # async
-#from servmoncode.receivers.proview2962_telnet_async import ProView2962
-from servmoncode.receivers.proview2962_http_async import ProView2962
-from servmoncode.receivers.proview7000_telnet_async import ProView7000
-from servmoncode.receivers.proview7100s_ssh_async import ProView7100s
-from servmoncode.receivers.proview7100mold_ssh_async import ProView7100mold
+#from servmoncode.receivers.proview2962_telnet_async import ProView2962        <- OLD TELNET
+from servmoncode.receivers.proview2962_http_async import ProView2962         # <- NEW HTTP
+#from servmoncode.receivers.proview7000_telnet_async import ProView7000        <- OLD TELNET 
+from servmoncode.receivers.proview7000_http_async import ProView7000         # <- NEW HTTP 
+#from servmoncode.receivers.proview7100s_ssh_async import ProView7100s         <- OLD SSH 
+from servmoncode.receivers.proview7100s_http_async import ProView7100s       # <- NEW HTTP
+#from servmoncode.receivers.proview7100mold_ssh_async import ProView7100mold   <- OLD SSH
+from servmoncode.receivers.proview7100mold_http_async import ProView7100mold # <- NEW HTTP
 from servmoncode.receivers.proview8130_http_async import ProView8130
 from servmoncode.receivers.proview7100mnew_http_async import ProView7100mnew
 
