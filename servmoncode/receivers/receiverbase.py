@@ -23,3 +23,6 @@ class Receiver:
         
         """ Time of update """ 
         self.time = "not initialized"
+
+        """ List of services (one or more) """
+        self.service = "not initialized"
