@@ -20,7 +20,10 @@ class DB():
         with self.engine.connect() as conn:
             metadata = sa.MetaData()
             receivers = sa.Table('receivers', metadata, autoload=True, autoload_with=conn)
-            query = sa.select([receivers]).where(receivers.columns.state == "True")
+            models = sa.Table('receiver_models', metadata, autoload=True, autoload_with=conn)
+
+            query = sa.select([receivers.columns.guid,receivers.columns.ip, receivers.columns.port, models.columns.model, receivers.columns.satellite, models.columns.login, models.columns.password, receivers.columns.state, receivers.columns.c_n, receivers.columns.eb_no, receivers.columns.l_m, receivers.columns.time]).where(receivers.columns.state == "True")
+            query = query.select_from(receivers.join(models, receivers.columns.model == models.columns.guid))
             ResultProxy = conn.execute(query)
             ResultSet = ResultProxy.fetchall()
             rows = ResultSet
