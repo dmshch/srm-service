@@ -3,6 +3,7 @@
 import sqlalchemy as sa
 import json
 import pathlib
+from datetime import datetime
 
 class DB():
     engine = None
@@ -48,9 +49,19 @@ class DB():
         with self.engine.connect() as conn:
             metadata = sa.MetaData()
             receivers = sa.Table('receivers', metadata, autoload=True, autoload_with=conn)
+            statistics = sa.Table('statistics', metadata, autoload=True, autoload_with=conn)
             for i in list_of_objects:
                 ip, port, time, c_n, eb_no, l_m = i.ip, i.port, i.time, i.c_n, i.eb_no, i.l_m
                 query = sa.update(receivers).values(time = i.time, c_n = i.c_n, eb_no = i.eb_no, l_m = i.l_m)
                 query = query.where(receivers.columns.ip == i.ip).where(receivers.columns.port == i.port)
                 results = conn.execute(query)
+                # Statistics
+                #  ip | port | time | c_n | eb_no | l_m
+                try:
+                    date_time = datetime.strptime(time, '%Y %b %d %H:%M').isoformat()
+                    query = sa.insert(statistics).values(ip = ip, port = port, c_n = c_n, eb_no = eb_no, l_m = l_m, date_time = date_time)
+                    ResultProxy = conn.execute(query)
+                except:
+                    continue
+                    
         self.engine.dispose()
