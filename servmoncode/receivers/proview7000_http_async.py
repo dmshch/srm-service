@@ -12,42 +12,52 @@ class ProView7000(receiverbase.Receiver):
         user = self.login
         password = self.password
 
-        request_payload = '''<?xml version="1.0"?><hconf source="SAG" xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:noNamespaceSchemaLocation='./hconf.xsd'><get-all><filter type="subtree"><AravaPortV1 Id="1300000''' + self.port + '''"/></filter></get-all></hconf>'''
+        headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+        request_payload = { "req":"CFG_ATTR_GET_FE_PORT_DVB_SAT_STATUS", "cnt":"1", "p0":"1" }
 
         auth = aiohttp.BasicAuth(login=self.login, password=self.password, encoding='utf-8')
 
         async with aiohttp.ClientSession(auth=auth) as session:
-            async with session.post("http://" + self.ip + "/BrowseConfig.pvr", data = request_payload) as response:
+
+            async with session.post("http://" + self.ip + "/request.esp", data = request_payload, headers = headers) as response:
                 #print("Status:", response.status, "\n")
                 html = await response.text()
+                #print(self.ip)
                 #print(html)
+                flag = "B1"
+            
+            if "Unknown request" in html:
 
-            """
-            # Get IP-services
-            request_payload = '''<?xml version="1.0"?><hconf source="SAG" xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:noNamespaceSchemaLocation='./hconf.xsd'><get-all><filter type="subtree"><MainBoardV100 Id="5000001"/></filter></get-all></hconf>'''
-            async with session.post("http://" + self.ip + "/BrowseConfig.pvr", data = request_payload) as response:
-                html_ip_serv = await response.text()
-                #print(html_ip_serv)
+                headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+                request_payload = { "req":"CFG_ATTR_FE_GET_PORT_STATUS", "fe_port_number":"1" }
 
-            # Get SDI-services
-            request_payload = '''<?xml version="1.0"?><hconf source="SAG" xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:noNamespaceSchemaLocation='./hconf.xsd'><get-all><filter type="subtree"><Platform Id="4000001"/></filter></get-all></hconf>'''
-            async with session.post("http://" + self.ip + "/BrowseConfig.pvr", data = request_payload) as response:
-                html_sdi_serv = await response.text()
-                #print(html_sdi_serv)
-            """
+                async with session.post("http://" + self.ip + "/request2.esp", data = request_payload, headers = headers) as response:
+                    #print("Status:", response.status, "\n")
+                    html = await response.text()
+                    #print(self.ip)
+                    #print(html)
+                    flag = "B2"
 
         out_list = html.split()
-
         out_data = dict()
-        for i in range(len(out_list)):
-            if "<C0n>" in out_list[i]:
-                out_data["C/N"] = out_list[i].replace("<C0n>", "").replace("</C0n>", "")
-            if "<EbN0>" in out_list[i]:
-                out_data["Eb/N0"] = out_list[i].replace("<EbN0>", "").replace("</EbN0>", "")
-            if "LinkMargin" in out_list[i]:
-                out_data["Link Margin"] = out_list[i].replace("<LinkMargin>", "").replace("</LinkMargin>", "")
-            if "BER" in out_list[i]:
-                out_data["BER"] = out_list[i].replace("<BER>", "").replace("</BER>", "")
+
+        if flag == "B1":
+            for i in range(len(out_list)):
+                if "<data8>" in out_list[i]:
+                    out_data["C/N"] = out_list[i + 2].replace("<value>", "").replace("</value>", "")
+                if "<data9>" in out_list[i]:
+                    out_data["Eb/N0"] = out_list[i + 2].replace("<value>", "").replace("</value>", "")
+                if "<data10>" in out_list[i]:
+                    out_data["Link Margin"] = out_list[i + 2].replace("<value>", "").replace("</value>", "")
+
+        if flag == "B2":
+            for i in range(len(out_list)):
+                if "<fe_C_N_status>" in out_list[i]:
+                    out_data["C/N"] = out_list[i + 1].replace("<value>", "").replace("</value>", "")
+                if "<fe_Eb_N0_status>" in out_list[i]:
+                    out_data["Eb/N0"] = out_list[i + 1].replace("<value>", "").replace("</value>", "")
+                if "<fe_link_margin_status>" in out_list[i]:
+                    out_data["Link Margin"] = out_list[i + 1].replace("<value>", "").replace("</value>", "")
 
         self.c_n = out_data["C/N"]
         self.eb_no = out_data["Eb/N0"]

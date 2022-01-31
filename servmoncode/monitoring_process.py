@@ -6,6 +6,7 @@ import asyncio
 from servmoncode import get_objects
 from servmoncode import dbsqlalch
 import traceback
+from aiohttp.client_exceptions import ClientConnectorError
 
 def start():
     list_of_objects = get_objects.get_objects_receivers()    
@@ -22,7 +23,7 @@ def loopy(list_of_objects):
     ioloop.run_until_complete(wait_tasks)
     ioloop.close()
     
-    print("Polling time was: " + tic(start))
+    print(datetime.datetime.now().strftime("%G %b %d %H:%M") + ". " +  "Polling time was: " + tic(start))
     dbsqlalch.DB().save(list_of_objects)
     
 async def get(i):
@@ -30,8 +31,13 @@ async def get(i):
     try:
         await i.get_parameters()
     except BaseException as err:
-        print(traceback.format_exc())
-        i.time, i.c_n, i.eb_no, i.l_m = "not initialized", "not initialized", "not initialized", "not initialized"
+        #print(traceback.format_exc())
+        if type(err) is ClientConnectorError:
+            #print("connection error")
+            i.c_n, i.eb_no, i.l_m = "connection error", "connection error", "connection error"
+        else:
+            #print("parsing error")
+            i.c_n, i.eb_no, i.l_m = "parsing error", "parsing error", "parsing error"
     
     i.time = datetime.datetime.now().strftime("%G %b %d %H:%M")
 

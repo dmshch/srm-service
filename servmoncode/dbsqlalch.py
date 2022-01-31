@@ -28,6 +28,7 @@ class DB():
             ResultProxy = conn.execute(query)
             ResultSet = ResultProxy.fetchall()
             rows = ResultSet
+            conn.close()
         self.engine.dispose()
         return rows
 
@@ -42,6 +43,7 @@ class DB():
 
             for row in rows:
                 login, password = row
+            conn.close()
         self.engine.dispose()
         return login, password
 
@@ -51,8 +53,8 @@ class DB():
             receivers = sa.Table('receivers', metadata, autoload=True, autoload_with=conn)
             statistics = sa.Table('statistics', metadata, autoload=True, autoload_with=conn)
             for i in list_of_objects:
-                ip, port, time, c_n, eb_no, l_m = i.ip, i.port, i.time, i.c_n, i.eb_no, i.l_m
-                query = sa.update(receivers).values(time = i.time, c_n = i.c_n, eb_no = i.eb_no, l_m = i.l_m)
+                ip, port, time, c_n, eb_no, l_m, service = i.ip, i.port, i.time, i.c_n, i.eb_no, i.l_m, i.service
+                query = sa.update(receivers).values(time = i.time, c_n = i.c_n, eb_no = i.eb_no, l_m = i.l_m, service = i.service)
                 query = query.where(receivers.columns.ip == i.ip).where(receivers.columns.port == i.port)
                 results = conn.execute(query)
                 # Statistics
@@ -63,5 +65,5 @@ class DB():
                     ResultProxy = conn.execute(query)
                 except:
                     continue
-                    
+            conn.close()
         self.engine.dispose()
