@@ -22,19 +22,20 @@ class ProView8130(receiverbase.Receiver):
             async with session.post("http://" + self.ip + "/BrowseConfig.pvr", data = request_payload) as response:
                 html = await response.text()
                 #print(html)
-                
+
+            
             # Get IP-services
             request_payload = '''<?xml version="1.0"?><hconf source="SAG" xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:noNamespaceSchemaLocation='./hconf.xsd'><get-all><filter type="subtree"><MainBoardV100 Id="5000001"/></filter></get-all></hconf>'''
             async with session.post("http://" + self.ip + "/BrowseConfig.pvr", data = request_payload) as response:
                 html_ip_serv = await response.text()
-                #print(html_ip_serv)
-
+                #print("html_ip_serv: " + "\n" + html_ip_serv)
+                        
             # Get SDI-services
             request_payload = '''<?xml version="1.0"?><hconf source="SAG" xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:noNamespaceSchemaLocation='./hconf.xsd'><get-all><filter type="subtree"><Platform Id="4000001"/></filter></get-all></hconf>'''
             async with session.post("http://" + self.ip + "/BrowseConfig.pvr", data = request_payload) as response:
                 html_sdi_serv = await response.text()
-                #print(html_sdi_serv)
-
+                #print("html_sdi_serv: " + "\n" + html_sdi_serv)
+            
         out_data = dict()
         
         # C/N, Eb/N0, Link Margin
@@ -51,31 +52,33 @@ class ProView8130(receiverbase.Receiver):
         self.c_n = out_data["C/N"]
         self.eb_no = out_data["Eb/N0"]
         self.l_m = out_data["Link Margin"]
+        
+        # CC Errors
+        out_list = html_ip_serv.split("\n")
+        self.cc_delta = ""
+        for i in range(len(out_list)):
+            if "<TsCcErrors>" in out_list[i]:
+                self.cc_delta = out_list[i].replace("<TsCcErrors>", "").replace("</TsCcErrors>", "").strip()
+                break
 
+        
         # IP-services
         out_list = html_ip_serv.split("\n")
-        str_of_service = "IP out: "
+        ip_service = "IP:"
         for i in range(len(out_list)):
-            if "<SelectedServiceName>" in out_list[i]:
-                str_of_service += out_list[i].replace("<SelectedServiceName>", "").replace("</SelectedServiceName>", "").strip()
-                str_of_service += "; "
-        self.service = str_of_service
-        out_data["Service"] = str_of_service
+            if "<OutputService" in out_list[i]:
+                ip_service += out_list[i + 2].replace("<ProgramNumber>","").replace("</ProgramNumber>","")
 
+        self.service = ip_service
+        
         # SDI-services
         out_list = html_sdi_serv.split("\n")
-        str_of_service = "SDI out: "
+        sdi_service = " SDI:"
         for i in range(len(out_list)):
             if "<SelectedInputProgram>" in out_list[i]:
-                number_of_service = out_list[i].replace("<SelectedInputProgram>", "").replace("</SelectedInputProgram>", "").strip()
-                flag = False
-                for i in range(len(out_list)):
-                    if ("<ProgramNumber>" + str(number_of_service) + "</ProgramNumber>") in out_list[i]:
-                        flag = True
-                    if flag == True and "<SelectedServiceName>" in out_list[i]:
-                        str_of_service += out_list[i].replace("<SelectedServiceName>", "").replace("</SelectedServiceName>", "").strip()
-                        break
-        self.service += str_of_service
-        out_data["Service"] += str_of_service
-                    
+                sdi_service += out_list[i].replace("<SelectedInputProgram>", "").replace("</SelectedInputProgram>", "").strip()
+                break
+
+        self.service += sdi_service 
+        
         #print("ip:" +self.ip + " c_n:" + self.c_n + " eb_no:" + self.eb_no + " l_m:" +  self.l_m + " service:" + self.service)

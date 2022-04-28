@@ -4,6 +4,8 @@ import sqlalchemy as sa
 import json
 import pathlib
 from datetime import datetime
+from datetime import timedelta
+import uuid
 
 class DB():
     engine = None
@@ -53,17 +55,33 @@ class DB():
             receivers = sa.Table('receivers', metadata, autoload=True, autoload_with=conn)
             statistics = sa.Table('statistics', metadata, autoload=True, autoload_with=conn)
             for i in list_of_objects:
-                ip, port, time, c_n, eb_no, l_m, service = i.ip, i.port, i.time, i.c_n, i.eb_no, i.l_m, i.service
-                query = sa.update(receivers).values(time = i.time, c_n = i.c_n, eb_no = i.eb_no, l_m = i.l_m, service = i.service)
-                query = query.where(receivers.columns.ip == i.ip).where(receivers.columns.port == i.port)
+                ip, port, time, c_n, eb_no, l_m, service, cc_delta = i.ip, i.port, i.time, i.c_n, i.eb_no, i.l_m, i.service, i.cc_delta
+                try:
+                    c_n = round(float(c_n), 2)
+                    eb_no = round(float(eb_no), 2)
+                    l_m = round(float(eb_no), 2)
+                except:
+                    pass
+                    
+                query = sa.update(receivers).values(time = time, c_n = c_n, eb_no = eb_no, l_m = l_m, service = service, cc_delta = cc_delta)
+                query = query.where(receivers.columns.ip == ip).where(receivers.columns.port == port)
                 results = conn.execute(query)
-                # Statistics
+
+                # Save new statistics
                 #  ip | port | time | c_n | eb_no | l_m
+                guid = str(uuid.uuid4())
                 try:
                     date_time = datetime.strptime(time, '%Y %b %d %H:%M').isoformat()
-                    query = sa.insert(statistics).values(ip = ip, port = port, c_n = c_n, eb_no = eb_no, l_m = l_m, date_time = date_time)
+                    query = sa.insert(statistics).values(ip = ip, port = port, c_n = c_n, eb_no = eb_no, l_m = l_m, date_time = date_time, guid = guid)
                     ResultProxy = conn.execute(query)
                 except:
                     continue
+
+            # Delete old statistics
+            current_time = datetime.now()
+            delta = timedelta(days = 31)
+            limit = (current_time - delta).isoformat()
+            query = sa.delete(statistics).where(statistics.columns.date_time <= limit)
+            conn.execute(query)
             conn.close()
         self.engine.dispose()

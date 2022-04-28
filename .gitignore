@@ -10,3 +10,5 @@
 *.txt
 *.log
 test_*.py*
+*.xml
+*.html

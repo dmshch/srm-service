@@ -26,3 +26,6 @@ class Receiver:
 
         """ List of services (one or more) """
         self.service = "not initialized"
+
+        """ Delta (for period of update) for CC errors"""
+        self.cc_delta = "not initialized"
