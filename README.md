@@ -3,8 +3,9 @@
 Satellite Receivers Monitoring service -  a service for collecting signal parameters from satellite receivers.
 
 Installation and configuration are [here](https://github.com/dmshch/srm-service/wiki).
+WEB interface is [here] (https://github.com/dmshch/web-app-srm-service).
 
-##### This currently works for the following satellite receiver models: 
+##### SRM service currently works for the following satellite receiver models: 
 
 * ProView 2962 (1 RF input; telnet access ->  synchronous and asynchronous implementation; web access -> asynchronous implementation)
 * ProView 7000 (1 RF input; telnet access ->  synchronous and asynchronous implementation; web access -> asynchronous implementation)
@@ -18,7 +19,8 @@ Installation and configuration are [here](https://github.com/dmshch/srm-service/
 * C/N (dB)
 * Eb/NO(dB)
 * Link Margin (dB)
-* List of services from RF -> in progress
+* Program Number for output (SDI and IP)
+* CC Errors for output services (for ProView 7100 old firmware < 4.0 - N/A)
 
 ##### Requirements:
 

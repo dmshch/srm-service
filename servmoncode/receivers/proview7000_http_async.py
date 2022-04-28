@@ -37,9 +37,27 @@ class ProView7000(receiverbase.Receiver):
                     #print(self.ip)
                     #print(html)
                     flag = "B2"
-
+                    
+            # For service and CC
+            s1 = """<hconf xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:noNamespaceSchemaLocation="./hconf.xsd" source="EMS"><get-all><filter type="subtree">"""
+            s2 = """<PVR-7K Id="1000001"><Platform Id="4000001" /></PVR-7K></filter></get-all></hconf>"""
+            headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+            request_payload = s1 + s2
+            async with session.post("http://" + self.ip + "/BrowseConfig", data = request_payload, headers = headers) as response:
+                html_srv_cc = await response.text()
+                #print(html_srv_cc)
+ 
         out_list = html.split()
+        out_list_srv_cc = html_srv_cc.split()
         out_data = dict()
+        
+        for i in range(len(out_list_srv_cc)):
+            if "<CcErrors>" in out_list_srv_cc[i]:
+                cc = out_list_srv_cc[i].replace("<CcErrors>","").replace("</CcErrors>","")
+            if "<SelectedInputProgram>" in out_list_srv_cc[i]:
+                program = out_list_srv_cc[i].replace("<SelectedInputProgram>","").replace("</SelectedInputProgram>","")
+        out_data["CC Errors"] = cc
+        out_data["Service"] = program
 
         if flag == "B1":
             for i in range(len(out_list)):
@@ -62,6 +80,8 @@ class ProView7000(receiverbase.Receiver):
         self.c_n = out_data["C/N"]
         self.eb_no = out_data["Eb/N0"]
         self.l_m = out_data["Link Margin"]
+        self.cc_delta = out_data["CC Errors"]
+        self.service = out_data["Service"]
 
         #print("ip:" +self.ip + " c_n:" + self.c_n + " eb_no:" + self.eb_no + " l_m:" +  self.l_m)
 

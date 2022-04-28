@@ -24,6 +24,8 @@ def loopy(list_of_objects):
     ioloop.close()
     
     print(datetime.datetime.now().strftime("%G %b %d %H:%M") + ". " +  "Polling time was: " + tic(start))
+
+    # Save new stats and delete old stats >= 1 month
     dbsqlalch.DB().save(list_of_objects)
     
 async def get(i):
@@ -37,6 +39,7 @@ async def get(i):
             i.c_n, i.eb_no, i.l_m = "connection error", "connection error", "connection error"
         else:
             #print("parsing error")
+            print(err)
             i.c_n, i.eb_no, i.l_m = "parsing error", "parsing error", "parsing error"
     
     i.time = datetime.datetime.now().strftime("%G %b %d %H:%M")
