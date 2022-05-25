@@ -59,7 +59,7 @@ class DB():
                 try:
                     c_n = round(float(c_n), 2)
                     eb_no = round(float(eb_no), 2)
-                    l_m = round(float(eb_no), 2)
+                    l_m = round(float(l_m), 2)
                 except:
                     pass
                     
