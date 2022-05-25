@@ -20,6 +20,7 @@ from servmoncode.receivers.proview7100s_http_async import ProView7100s       # <
 from servmoncode.receivers.proview7100mold_http_async import ProView7100mold # <- NEW HTTP
 from servmoncode.receivers.proview8130_http_async import ProView8130
 from servmoncode.receivers.proview7100mnew_http_async import ProView7100mnew
+from servmoncode.receivers.proview7100snew_http_async import ProView7100snew
 
 def get_objects_receivers():
     
@@ -43,7 +44,8 @@ def return_object(ip, model, satellite, login, password, port, state):
         "proview7100s": ProView7100s(ip, model, satellite, login, password, port, state),
         "proview7100mold": ProView7100mold(ip, model, satellite, login, password, port, state),
         "proview8130": ProView8130(ip, model, satellite, login, password, port, state),
-        "proview7100mnew": ProView7100mnew(ip, model, satellite, login, password, port, state)
+        "proview7100mnew": ProView7100mnew(ip, model, satellite, login, password, port, state),
+        "proview7100snew": ProView7100snew(ip, model, satellite, login, password, port, state)
     }
 
     return select_class[model]
