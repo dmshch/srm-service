@@ -21,7 +21,7 @@ WEB interface is [here](https://github.com/dmshch/web-app-srm-service).
 * Eb/NO(dB)
 * Link Margin (dB)
 * Program Number for output (SDI and IP)
-* CC Errors for output services (for ProView 7100 old firmware < 4.0 - N/A)
+* CC Errors for output services, delta between updates (Δ)(for ProView 7100 old firmware < 4.0 - N/A)
 
 ##### Requirements:
 

@@ -55,15 +55,48 @@ class DB():
             receivers = sa.Table('receivers', metadata, autoload=True, autoload_with=conn)
             statistics = sa.Table('statistics', metadata, autoload=True, autoload_with=conn)
             for i in list_of_objects:
-                ip, port, time, c_n, eb_no, l_m, service, cc_delta = i.ip, i.port, i.time, i.c_n, i.eb_no, i.l_m, i.service, i.cc_delta
+
+                # Need to rename in classes -> cc_delta
+
+                ip, port, time, c_n, eb_no, l_m, service, cc = i.ip, i.port, i.time, i.c_n, i.eb_no, i.l_m, i.service, i.cc
+
                 try:
                     c_n = round(float(c_n), 2)
                     eb_no = round(float(eb_no), 2)
                     l_m = round(float(l_m), 2)
                 except:
                     pass
+                
+                # Get old value for cc
+                query = sa.select([receivers.columns.cc]).where(receivers.columns.ip == ip).where(receivers.columns.port == port)
+                ResultProxy = conn.execute(query)
+                ResultSet = ResultProxy.first()
+                old_cc = ResultSet[0]
+                
+                # Count and save
+                cc = cc.strip()
+                try:
+                    float(cc)
+                except:
+                    cc = "parsing error"                
+
+                try:
+                    float(old_cc)
+                except:
+                    old_cc = "parsing error"
                     
-                query = sa.update(receivers).values(time = time, c_n = c_n, eb_no = eb_no, l_m = l_m, service = service, cc_delta = cc_delta)
+                cc_delta = "n/a"
+                
+                if old_cc == "parsing error" and cc != "parsing error":
+                    cc_delta = 0
+                elif old_cc != "parsing error" and cc != "parsing error":
+                    cc_delta = float(cc) - float(old_cc)
+                
+                #print(f"cc - {cc}")
+                #print(f"old_cc - {old_cc}")
+                #print(f"cc_delta - {cc_delta}")
+                
+                query = sa.update(receivers).values(time = time, c_n = c_n, eb_no = eb_no, l_m = l_m, service = service, cc_delta = cc_delta, cc = cc)
                 query = query.where(receivers.columns.ip == ip).where(receivers.columns.port == port)
                 results = conn.execute(query)
 
@@ -84,4 +117,5 @@ class DB():
             query = sa.delete(statistics).where(statistics.columns.date_time <= limit)
             conn.execute(query)
             conn.close()
+
         self.engine.dispose()

@@ -64,6 +64,6 @@ class ProView7100snew(receiverbase.Receiver):
         self.c_n = out_data["C/N"]
         self.eb_no = out_data["Eb/N0"]
         self.l_m = out_data["Link Margin"]
-        self.cc_delta = out_data["CC Errors"]
+        self.cc = out_data["CC Errors"]
         self.service = services
         #print(f"ip:{self.ip}, c_n:{self.c_n}, eb_no:{self.eb_no}, l_m:{self.l_m}, cc_delta:{self.cc_delta}, service:{self.service}")
