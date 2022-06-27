@@ -64,7 +64,7 @@ class ProView2962(receiverbase.Receiver):
         self.c_n = out_data["C/N"]
         self.eb_no = out_data["Eb/N0"]
         self.l_m = out_data["Link Margin"]
-        self.service = out_data["Service"]
-        self.cc_delta = out_data["CC Delta"]
+        self.service = '{"SDI":"' + out_data["Service"] + '"}'
+        self.cc = out_data["CC Delta"]
 
         #print("ip:" +self.ip + " c_n:" + self.c_n + " eb_no:" + self.eb_no + " l_m:" +  self.l_m)

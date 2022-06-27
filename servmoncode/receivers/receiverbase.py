@@ -28,4 +28,4 @@ class Receiver:
         self.service = "not initialized"
 
         """ Delta (for period of update) for CC errors"""
-        self.cc_delta = "not initialized"
+        self.cc = "not initialized"

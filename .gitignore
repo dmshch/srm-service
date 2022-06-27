@@ -12,3 +12,4 @@
 test_*.py*
 *.xml
 *.html
+/backup_db

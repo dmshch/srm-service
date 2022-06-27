@@ -55,10 +55,10 @@ class ProView8130(receiverbase.Receiver):
         
         # CC Errors
         out_list = html_ip_serv.split("\n")
-        self.cc_delta = ""
+        self.cc = ""
         for i in range(len(out_list)):
             if "<TsCcErrors>" in out_list[i]:
-                self.cc_delta = out_list[i].replace("<TsCcErrors>", "").replace("</TsCcErrors>", "").strip()
+                self.cc = out_list[i].replace("<TsCcErrors>", "").replace("</TsCcErrors>", "").strip()
                 break
 
         
