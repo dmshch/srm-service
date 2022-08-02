@@ -1,6 +1,6 @@
 # Copyright © 2020 Dmitrii Shcherbakov. All rights reserved.
 
-import sqlalchemy as sa
+import sqlalchemy as sa 
 import json
 import pathlib
 from datetime import datetime
@@ -87,7 +87,7 @@ class DB():
                     
                 cc_delta = "n/a"
                 
-                if old_cc == "parsing error" and cc != "parsing error":
+                if old_cc == "parsing error" or cc == "parsing error":
                     cc_delta = 0
                 elif old_cc != "parsing error" and cc != "parsing error":
                     cc_delta = float(cc) - float(old_cc)
