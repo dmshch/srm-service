@@ -1,6 +1,6 @@
 # Copyright © 2020 Dmitrii Shcherbakov. All rights reserved.
 
-import sqlalchemy as sa 
+import sqlalchemy as sa
 import json
 import pathlib
 from datetime import datetime
