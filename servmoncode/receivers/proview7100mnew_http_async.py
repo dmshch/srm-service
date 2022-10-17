@@ -67,7 +67,8 @@ class ProView7100mnew(receiverbase.Receiver):
                 break
 
         # For services
-        services = ""
+        services = "None"
+        all_services = ""
         flag = False
         for i in range(len(out_list)):
             if '<OutputTs Id="5000000' + self.port + '">' in out_list[i]:
@@ -75,7 +76,11 @@ class ProView7100mnew(receiverbase.Receiver):
             if "</OutputPmts>" in out_list[i] and flag is True:
                 break
             if "<ProgramNum>" in out_list[i] and flag is True:
-                services += out_list[i].replace("<ProgramNum>","").replace("</ProgramNum>","").strip() + " "
+                all_services += out_list[i].replace("<ProgramNum>","").replace("</ProgramNum>","").strip() + " "
+        if all_services == "":
+            services = ('{"IP":"' + services + '"}')
+        else:
+            services = ('{"IP":"' + all_services.strip() + '"}')
 
         self.c_n = out_data["C/N"]
         self.eb_no = out_data["Eb/N0"]

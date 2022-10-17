@@ -57,7 +57,7 @@ class ProView7000(receiverbase.Receiver):
             if "<SelectedInputProgram>" in out_list_srv_cc[i]:
                 program = out_list_srv_cc[i].replace("<SelectedInputProgram>","").replace("</SelectedInputProgram>","")
         out_data["CC Errors"] = cc
-        out_data["Service"] = program
+        out_data["Service"] = '{"SDI": ' + '"' + program + '"}'
 
         if flag == "B1":
             for i in range(len(out_list)):
