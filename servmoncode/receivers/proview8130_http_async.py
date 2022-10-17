@@ -60,25 +60,26 @@ class ProView8130(receiverbase.Receiver):
             if "<TsCcErrors>" in out_list[i]:
                 self.cc = out_list[i].replace("<TsCcErrors>", "").replace("</TsCcErrors>", "").strip()
                 break
-
         
         # IP-services
         out_list = html_ip_serv.split("\n")
-        ip_service = "IP:"
+        ip_service = 'None' 
         for i in range(len(out_list)):
             if "<OutputService" in out_list[i]:
+                ip_service = ''
                 ip_service += out_list[i + 2].replace("<ProgramNumber>","").replace("</ProgramNumber>","")
 
-        self.service = ip_service
+        self.service = '{"IP": "' + ip_service + '", '
         
         # SDI-services
         out_list = html_sdi_serv.split("\n")
-        sdi_service = " SDI:"
+        sdi_service = 'None'
         for i in range(len(out_list)):
             if "<SelectedInputProgram>" in out_list[i]:
+                sdi_service = ''
                 sdi_service += out_list[i].replace("<SelectedInputProgram>", "").replace("</SelectedInputProgram>", "").strip()
                 break
 
-        self.service += sdi_service 
+        self.service += ('"SDI": "' + sdi_service + '"'  + '}')
         
         #print("ip:" +self.ip + " c_n:" + self.c_n + " eb_no:" + self.eb_no + " l_m:" +  self.l_m + " service:" + self.service)

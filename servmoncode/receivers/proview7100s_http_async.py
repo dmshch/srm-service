@@ -56,7 +56,7 @@ class ProView7100s(receiverbase.Receiver):
             if "<SelectedInputProgram>" in out_list_srv_cc[i]:
                 program = out_list_srv_cc[i].replace("<SelectedInputProgram>","").replace("</SelectedInputProgram>","")
         out_data["CC Errors"] = cc
-        out_data["Service"] = program        
+        out_data["Service"] = '{"SDI": "' + program + '"}'
 
         self.c_n = out_data["C/N"]
         self.eb_no = out_data["Eb/N0"]

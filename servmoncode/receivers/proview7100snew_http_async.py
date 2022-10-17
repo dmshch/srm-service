@@ -60,7 +60,7 @@ class ProView7100snew(receiverbase.Receiver):
         for i in range(len(out_list)):
             if "<SelectedInputProgram>" in out_list[i]:
                 services += out_list[i].replace("<SelectedInputProgram>","").replace("</SelectedInputProgram>","").strip() + " "
-
+        services = ('{"SDI":"' + services.strip() + '"}')
         self.c_n = out_data["C/N"]
         self.eb_no = out_data["Eb/N0"]
         self.l_m = out_data["Link Margin"]
