@@ -63,13 +63,15 @@ class ProView8130(receiverbase.Receiver):
         
         # IP-services
         out_list = html_ip_serv.split("\n")
-        ip_service = 'None' 
+        ip_service = 'None'
+        temp_ip = ''
         for i in range(len(out_list)):
             if "<OutputService" in out_list[i]:
-                ip_service = ''
-                ip_service += out_list[i + 2].replace("<ProgramNumber>","").replace("</ProgramNumber>","")
-
-        self.service = '{"IP": "' + ip_service + '", '
+                temp_ip += out_list[i + 2].replace("<ProgramNumber>","").replace("</ProgramNumber>","").strip() + " "
+        if temp_ip == '':
+            self.service = '{"IP": "' + ip_service + '", '
+        else:
+            self.service = '{"IP": "' + temp_ip.strip() + '", '
         
         # SDI-services
         out_list = html_sdi_serv.split("\n")
